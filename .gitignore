@@ -1,0 +1,21 @@
+# Estado local de la infraestructura (endpoints, ids, passwords)
+.state/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Llaves / credenciales (nunca subir)
+*.pem
+*.env
+.env
+
+# Artefactos locales de prueba
+*.zip
+polaroid-*.jpg
+thumb-*.jpg
+
+# Sistema
+.DS_Store
