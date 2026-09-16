@@ -6,26 +6,31 @@
 
 ## Descripción del proyecto
 
-<!-- 200-300 palabras. Sugerencia de contenido:
+InstaBox es el backend de una estación de fotos para bodas y eventos sociales.
+Resuelve un problema del fotógrafo: como atiende varios eventos a la vez,
+necesita mantener separadas las fotos y los mensajes de cada uno, y al terminar
+entregar un álbum estilo Polaroid listo para imprimir.
 
-InstaBox es un backend serverless-friendly desplegado en AWS para la estación
-de fotos de un fotógrafo de eventos. Permite registrar eventos, recibir fotos
-con un mensaje de los invitados, generar una versión Polaroid de cada foto y,
-al finalizar el evento, entregar un álbum en formato .zip.
+El sistema ofrece cuatro operaciones. La primera registra un evento nuevo (con
+el nombre del cliente, el tipo de evento y la fecha) y devuelve un
+identificador único. La segunda recibe una foto y un mensaje de un invitado:
+genera una versión reducida de la imagen, arma la Polaroid agregando el marco
+blanco y el mensaje debajo, y guarda ambas versiones junto con su información.
+La tercera permite consultar los datos de un evento y cuántas fotos lleva. La
+última cierra el evento y entrega todas las Polaroids empaquetadas en un solo
+archivo comprimido para descargar.
 
-El backend está construido en Python con FastAPI y corre en una instancia EC2.
-Expone cuatro endpoints: POST /events crea un evento y lo registra en la base
-de datos; POST /upload recibe una foto y un mensaje, reduce la imagen a 128x128,
-compone la Polaroid (marco blanco y mensaje debajo) con Pillow, sube ambas
-versiones a S3 y guarda la metadata en RDS; GET /events/{id} devuelve la
-información del evento y el número de fotos; POST /finish empaqueta las
-Polaroids en un archivo .zip descargable.
-
-Describe aquí las decisiones de arquitectura: por qué RDS PostgreSQL, cómo se
-relacionan las tablas events y photos por event_id, cómo la EC2 usa el instance
-profile LabInstanceProfile para leer las credenciales desde Secrets Manager sin
-hardcodearlas, y cómo se organizan los objetos en S3 (pictures/ y polaroids/).
--->
+Todo corre en la nube de AWS con una separación clara de responsabilidades. El
+código de la aplicación se ejecuta en un servidor EC2 y es el único punto de
+entrada por HTTP. Las imágenes se almacenan en S3, separadas en dos carpetas:
+una para las fotos originales reducidas y otra para las Polaroids terminadas.
+La información de eventos y fotos se guarda en una base de datos relacional en
+RDS, con dos tablas conectadas por el identificador del evento. Las contraseñas
+de la base de datos no viven en el código: se guardan en AWS Secrets Manager y
+la aplicación las obtiene al momento de ejecutarse, usando los permisos que le
+otorga su instance profile. Cada archivo se identifica con un nombre único para
+evitar colisiones. El resultado es una solución sencilla, funcional y coherente
+con una arquitectura de nube.
 
 ## Diagrama de arquitectura
 

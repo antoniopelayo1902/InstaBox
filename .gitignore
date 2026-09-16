@@ -16,6 +16,8 @@ venv/
 *.zip
 polaroid-*.jpg
 thumb-*.jpg
+/polaroids/
+/pictures/
 
 # Sistema
 .DS_Store
